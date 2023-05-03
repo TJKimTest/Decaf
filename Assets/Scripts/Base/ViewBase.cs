@@ -20,7 +20,7 @@ namespace TJ.Decaf.Base
             Disappeared
         }
 
-        [field: SerializeField] protected VisibleState Visible { get; set; } = VisibleState.None;
+        [field: SerializeField] public VisibleState Visible { get; protected set; } = VisibleState.None;
 
         protected CompositeDisposable Disposables { get; set; } = new CompositeDisposable();
 

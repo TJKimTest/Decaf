@@ -1,36 +1,40 @@
-using TJ.Decaf.Infra;
-using TJ.Decaf.Interface;
-using TJ.Decaf.Manager;
+
 using UnityEngine;
 using Zenject;
 
-public class SplashSceneInstaller : MonoInstaller
+namespace TJ.Decaf.Installer
 {
-    public override void InstallBindings()
+    using TJ.Decaf.Infra;
+    using TJ.Decaf.Interface;
+    using TJ.Decaf.Manager;
+    public class SplashSceneInstaller : MonoInstaller
     {
-        SetupNavivationManager();
-    }
-
-    private void SetupNavivationManager()
-    {
-        var navigationManager = Container.Resolve<UINavigationManager>();
-        if (navigationManager)
+        public override void InstallBindings()
         {
-            navigationManager.Dispose();
+            SetupNavivationManager();
+        }
 
-            var curTargetModuleNames = ModuleConstants.SplashScene.ModuleResourceNames;
-            curTargetModuleNames.ForEach(element => 
+        private void SetupNavivationManager()
+        {
+            var navigationManager = Container.Resolve<UINavigationManager>();
+            if (navigationManager)
             {
-                var loadedModuleObject = Container.InstantiatePrefabResource(element.RootModuleResourceName);
-                
-                if (loadedModuleObject.TryGetComponent<Canvas>(out var canvas))
-                    canvas.sortingOrder = element.Order;
-                
-                if (loadedModuleObject.TryGetComponent<IModule>(out var module))
+                navigationManager.Dispose();
+
+                var curTargetModuleNames = ModuleConstants.SplashScene.ModuleResourceNames;
+                curTargetModuleNames.ForEach(element =>
                 {
-                    module.RegisterModule(navigationManager);
-                }
-            });
+                    var loadedModuleObject = Container.InstantiatePrefabResource(element.RootModuleResourceName);
+
+                    if (loadedModuleObject.TryGetComponent<Canvas>(out var canvas))
+                        canvas.sortingOrder = element.Order;
+
+                    if (loadedModuleObject.TryGetComponent<IModule>(out var module))
+                    {
+                        module.RegisterModule(navigationManager);
+                    }
+                });
+            }
         }
     }
 }

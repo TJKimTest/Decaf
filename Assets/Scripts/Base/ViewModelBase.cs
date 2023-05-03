@@ -15,16 +15,20 @@ namespace TJ.Decaf.Base
         #region [ Cores ]
         protected SceneManager sceneManager;
         protected UINavigationManager navigationManager;
+        protected DeviceConfigManager deviceConfigManager;
         #endregion
 
-        protected CompositeDisposable Disposables { get; private set; }
+        protected CompositeDisposable Disposables { get; private set; } 
+            = new CompositeDisposable();
 
         [Inject]
         private void InjectionCores(SceneManager sceneManager,
-                                    UINavigationManager navigationManager)
+                                    UINavigationManager navigationManager,
+                                    DeviceConfigManager deviceConfigManager)
         {
             this.sceneManager = sceneManager;
             this.navigationManager = navigationManager;
+            this.deviceConfigManager = deviceConfigManager;
         }
 
         public abstract void OnInitialized(ViewBase view);

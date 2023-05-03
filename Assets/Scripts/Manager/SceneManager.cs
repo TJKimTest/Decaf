@@ -10,6 +10,8 @@ namespace TJ.Decaf.Manager
     public enum SceneType
     {
         None,
+
+        Config,
         
         Splash,
 

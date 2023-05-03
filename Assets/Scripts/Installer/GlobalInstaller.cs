@@ -13,6 +13,7 @@ namespace TJ.Decaf.Installer
         {
             BindingNavigationManager();
             BindingSceneManager();
+            BindingDeviceConfigManager();
         }
 
         private void BindingNavigationManager()
@@ -30,6 +31,11 @@ namespace TJ.Decaf.Installer
                 .AsSingle()
                 .NonLazy();
         }
+
+        private void BindingDeviceConfigManager()
+            => Container.Bind<DeviceConfigManager>()
+            .AsSingle()
+            .NonLazy();
     }
 }
 

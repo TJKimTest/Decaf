@@ -139,8 +139,11 @@ namespace TJ.Decaf.Manager
             {
                 container.ForEach(element => 
                 {
-                    element.ViewModel.Dispose();
-                    element.View.HideImmediate();
+                    if(element.ViewModel)
+                        element.ViewModel.Dispose();
+                    if(element.View)
+                        element.View.HideImmediate();
+                    
                     element.Destroy();
                 });
 
