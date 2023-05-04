@@ -16,6 +16,8 @@ namespace TJ.Decaf.Base
         protected SceneManager sceneManager;
         protected UINavigationManager navigationManager;
         protected DeviceConfigManager deviceConfigManager;
+        protected SceneTransitionFactory sceneTransitionFactory;
+        protected GlobalDataContainer globalDataContainer;
         #endregion
 
         protected CompositeDisposable Disposables { get; private set; } 
@@ -24,11 +26,15 @@ namespace TJ.Decaf.Base
         [Inject]
         private void InjectionCores(SceneManager sceneManager,
                                     UINavigationManager navigationManager,
-                                    DeviceConfigManager deviceConfigManager)
+                                    DeviceConfigManager deviceConfigManager,
+                                    SceneTransitionFactory sceneTransitionFactory,
+                                    GlobalDataContainer globalDataContainer)
         {
             this.sceneManager = sceneManager;
             this.navigationManager = navigationManager;
             this.deviceConfigManager = deviceConfigManager;
+            this.sceneTransitionFactory = sceneTransitionFactory;
+            this.globalDataContainer = globalDataContainer;
         }
 
         public abstract void OnInitialized(ViewBase view);

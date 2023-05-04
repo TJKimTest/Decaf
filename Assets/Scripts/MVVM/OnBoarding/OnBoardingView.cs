@@ -7,11 +7,14 @@ namespace TJ.Decaf.MVVM.OnBoarding
 {
     using System;
     using System.Linq;
+    using UnityEngine.UI;
+    using TMPro;
+
     using DG.Tweening;
+
     using TJ.Decaf.Base;
     using TJ.Decaf.UI;
-    using UnityEngine.UI;
-
+    
     public class OnBoardingView : ViewBase
     {
         [Serializable]
@@ -79,6 +82,9 @@ namespace TJ.Decaf.MVVM.OnBoarding
 
         [Space(20)]
         [SerializeField] private Image circleGauge;
+
+        [Space(20)]
+        [SerializeField] private TMP_Text lastInfo;
         
 
         [Header("[Others] - Debugging properties")]
@@ -95,8 +101,8 @@ namespace TJ.Decaf.MVVM.OnBoarding
                     return default;
             }
         }
-
-        public PageType GetCurrentPage() => curOpenedPageType;
+        public List<OnBoardingPage> GetPages() => onBoardingPages;
+        public PageType GetCurrentPageType() => curOpenedPageType;
         public Button GetNextButton() => nextButton;
         public Button GetBackButton() => backButton;
         public Button GetRetryButton() => retryButton;
@@ -112,6 +118,8 @@ namespace TJ.Decaf.MVVM.OnBoarding
 
         public override void Show(Action onComplete)
         {
+            OnShow = onComplete;
+
             Visible = VisibleState.Appearing;
 
             ChangeCircleGauge(PageType.First);
@@ -138,6 +146,31 @@ namespace TJ.Decaf.MVVM.OnBoarding
         }
 
         #region [ Public methods ]
+        public int RefreshCafSize()
+        {
+            var curSecondPage = onBoardingPages
+                .FirstOrDefault(o => o.PageType == PageType.Second);
+
+            if (curSecondPage)
+            {
+                int cafValue = 0;
+                var curSelectedToggle = curSecondPage.Toggles.FirstOrDefault(o => o.GetToggleComponent().isOn);
+                if (curSelectedToggle)
+                {
+                    if (curSelectedToggle.GetValue() == "Youth")
+                        cafValue = 150;
+                    else
+                        cafValue = 200;
+
+                    lastInfo.text = $"하루 카페인 섭취량을\n<color=#557705>{cafValue}mg</color>로 추천드립니다.";
+                }
+
+                return cafValue;
+            }
+            else
+                return -1;
+        }
+
         public void ShowFinishedParticle()
         {
             finishedParticle.DOScale(1, 1f)
@@ -217,10 +250,11 @@ namespace TJ.Decaf.MVVM.OnBoarding
                 var curPageSet = onBoardingPages.FirstOrDefault(o => o.PageType == curPageType);
                 if (curPageSet)
                 {
-                    curPageSet.Toggles.ForEach(element => 
-                    {
-                        element.GetToggleComponent().isOn = false;
-                    });
+                    curPageSet.Group?.SetAllTogglesOff();
+                    //curPageSet.Toggles.ForEach(element => 
+                    //{
+                    //    element.GetToggleComponent().isOn = false;
+                    //});
                 }
             }
         }

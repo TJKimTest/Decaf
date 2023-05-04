@@ -14,6 +14,8 @@ namespace TJ.Decaf.Installer
             BindingNavigationManager();
             BindingSceneManager();
             BindingDeviceConfigManager();
+            BindingSceneTransitionFactory();
+            BindingGlobalDataContainer();
         }
 
         private void BindingNavigationManager()
@@ -34,6 +36,18 @@ namespace TJ.Decaf.Installer
 
         private void BindingDeviceConfigManager()
             => Container.Bind<DeviceConfigManager>()
+            .AsSingle()
+            .NonLazy();
+
+        private void BindingSceneTransitionFactory()
+            => Container.Bind<SceneTransitionFactory>()
+            .FromComponentInNewPrefabResource("Managers/Manager - SceneTransitionFactory")
+            .WithGameObjectName("Manager - SceneTransitionFactory")
+            .AsSingle()
+            .NonLazy();
+
+        private void BindingGlobalDataContainer()
+            => Container.Bind<GlobalDataContainer>()
             .AsSingle()
             .NonLazy();
     }

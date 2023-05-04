@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -16,6 +17,7 @@ namespace TJ.Decaf.Manager
         Splash,
 
         OnBoarding,
+        Main,
     }
 
     public class SceneManager : MonoBehaviour
@@ -25,6 +27,8 @@ namespace TJ.Decaf.Manager
         [field: SerializeField] public SceneType CurrentSceneType { get; private set; } = SceneType.None;
         [field: SerializeField] public SceneType PrevSceneType { get; private set; } = SceneType.None;
         [field: SerializeField] public SceneType NextSceneType { get; private set; } = SceneType.None;
+
+        private Action onCompleteLoaded;
 
         public override string ToString()
         {
@@ -48,6 +52,18 @@ namespace TJ.Decaf.Manager
             var convScenceName = sceneType.ToString().Split('_')[0];
 
             UnitySceneManager.LoadScene(convScenceName, loadSceneMode);
+        }
+        public void ChangeScene(SceneType sceneType, LoadSceneMode loadSceneMode, Action onComplete)
+        {
+            SwapCurrentTypeWithPreviousType(sceneType);
+
+            var convScenceName = sceneType.ToString().Split('_')[0];
+
+            UnitySceneManager.LoadScene(convScenceName, loadSceneMode);
+            onCompleteLoaded = onComplete;
+
+            UnitySceneManager.sceneLoaded -= OnCompleteLoaded;
+            UnitySceneManager.sceneLoaded += OnCompleteLoaded;
         }
         public void ChangeNextScene(LoadSceneMode loadSceneMode)
         {
@@ -95,6 +111,11 @@ namespace TJ.Decaf.Manager
         #endregion
 
         #region [ Private methods ]
+        private void OnCompleteLoaded(Scene curLoadedScene, LoadSceneMode curLoadedSceneMode)
+        {
+            onCompleteLoaded?.Invoke();
+            onCompleteLoaded = null;
+        }
         private void SwapCurrentTypeWithPreviousType(SceneType sceneType)
         {
             PrevSceneType = CurrentSceneType;
