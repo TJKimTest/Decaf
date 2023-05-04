@@ -36,6 +36,15 @@ namespace TJ.Decaf.Infra
                 new ModuleData("Modules/Module - OnBoarding", null, 0),
             };
         }
+
+        public static class MainScene
+        {
+            public static readonly List<ModuleData> ModuleResourceNames = new List<ModuleData>()
+            {
+                new ModuleData("Modules/Module - Main", null, 0),
+                new ModuleData("Modules/Module - BottomTab", null, 1),
+            };
+        }
     }
 
 }

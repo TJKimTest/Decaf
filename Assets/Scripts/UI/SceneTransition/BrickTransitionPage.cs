@@ -15,8 +15,22 @@ namespace TJ.Decaf.UI
             Playing,
         }
 
+        public enum VisibleState
+        {
+            None,
+
+            Appearing,
+            Appeared,
+
+            Disappearing,
+            Disappeared
+        }
+
         [SerializeField] private AnimationState curAnimationState = AnimationState.None;
+        [SerializeField] private VisibleState curVisibleState = VisibleState.None;
         [SerializeField] private List<TransitionBrick> bricks;
+
+        public VisibleState GetVisible() => curVisibleState;
 
         public void ShowImmediate()
             => bricks.ForEach(element => element.Show());
@@ -29,11 +43,12 @@ namespace TJ.Decaf.UI
                 return;
 
             curAnimationState = AnimationState.Playing;
+            curVisibleState = VisibleState.Appearing;
 
             bricks.ForEach(element => 
             {
                 if(element.Visible == TransitionBrick.VisibleState.Disappeared)
-                    element.ShowAnimation(0.25f);
+                    element.ShowAnimation(0.5f);
             });
             
             IEnumerator CheckingFinished()
@@ -50,6 +65,7 @@ namespace TJ.Decaf.UI
                 }
 
                 curAnimationState = AnimationState.None;
+                curVisibleState = VisibleState.Appeared;
 
                 onComplete?.Invoke();
 
@@ -64,11 +80,12 @@ namespace TJ.Decaf.UI
                 return;
 
             curAnimationState = AnimationState.Playing;
+            curVisibleState = VisibleState.Disappearing;
 
             bricks.ForEach(element =>
             {
                 if(element.Visible == TransitionBrick.VisibleState.Appeared)
-                    element.HideAnimation(0.25f);
+                    element.HideAnimation(0.5f);
             });
 
             IEnumerator CheckingFinished()
@@ -85,6 +102,7 @@ namespace TJ.Decaf.UI
                 }
 
                 curAnimationState = AnimationState.None;
+                curVisibleState = VisibleState.Disappeared;
 
                 onComplete?.Invoke();
 
