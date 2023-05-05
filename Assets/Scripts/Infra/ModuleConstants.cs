@@ -42,7 +42,7 @@ namespace TJ.Decaf.Infra
             public static readonly List<ModuleData> ModuleResourceNames = new List<ModuleData>()
             {
                 new ModuleData("Modules/Module - Main", null, 0),
-                new ModuleData("Modules/Module - BottomTab", null, 1),
+                new ModuleData("Modules/Module - BottomTab", null, 2),
             };
         }
     }
