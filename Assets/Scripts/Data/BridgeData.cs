@@ -5,9 +5,11 @@ using UnityEngine;
 
 namespace TJ.Decaf.Data
 {
-    public class BridgeData
+    using System.Linq;
+
+    public class BridgeData : IEqualityComparer<BridgeData>
     {
-        public class Data
+        public class Data : IEqualityComparer<Data>
         {
             public string Name { get; private set; } = "";
             public object Source { get; private set; }
@@ -30,6 +32,14 @@ namespace TJ.Decaf.Data
 
                 return result;
             }
+
+            public bool Equals(Data x, Data y)
+                => x.DataType == y.DataType &&
+                   x.Name == y.Name &&
+                   x.Source == y.Source;
+
+            public int GetHashCode(Data obj)
+                => obj.GetHashCode();
 
             public static implicit operator bool(Data d) => d != null;
         }
@@ -63,9 +73,22 @@ namespace TJ.Decaf.Data
             return result;
         }
 
+        public static bool TryExists(string dataName, out BridgeData output, params BridgeData[] sources)
+        {
+            output = sources.FirstOrDefault(o => o.Source.Name == dataName);
+            return output != null;
+        }
         public static implicit operator bool(BridgeData b) => b != null;
         public override string ToString()
             => $" [ {From} ] - Contect Key : {To} / DataType : {Source.DataType}";
+
+        public bool Equals(BridgeData x, BridgeData y)
+            => x.From == y.From &&
+               x.Equals(x, y) &&
+               x.To == y.To;
+
+        public int GetHashCode(BridgeData obj)
+            => obj.GetHashCode();
     }
 
 }

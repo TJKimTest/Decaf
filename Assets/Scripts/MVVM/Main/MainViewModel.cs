@@ -24,7 +24,10 @@ namespace TJ.Decaf.MVVM.Main
 
         public override void ReceiveData(params BridgeData[] datas)
         {
-            throw new System.NotImplementedException();
+            if (BridgeData.TryExists("OpenNearbyCafes", out var target, datas))
+            {
+                Debug.Log($"Receive data : OpenNearbyCafes");   
+            }
         }
     }
 

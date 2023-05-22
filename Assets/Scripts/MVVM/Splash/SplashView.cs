@@ -9,6 +9,7 @@ namespace TJ.Decaf.MVVM.Splash
     using UnityEngine.UI;
 
     using DG.Tweening;
+    using Cysharp.Threading.Tasks;
 
     using TJ.Decaf.Base;
 
@@ -18,15 +19,15 @@ namespace TJ.Decaf.MVVM.Splash
         [Header("[Editor setting] - UI components")]
         [SerializeField] private Image logo;
 
-        public override void Hide(Action onComplete)
+        public override async void Hide(Action onComplete)
         {
             OnHide = onComplete;
 
             Visible = VisibleState.Disappearing;
 
-            logo.DOFade(0, 0.5f)
+            await logo.DOFade(0, 0.5f)
                 .Play()
-                .OnComplete(() => 
+                .OnComplete(() =>
                 {
                     Visible = VisibleState.Disappeared;
 
@@ -40,13 +41,13 @@ namespace TJ.Decaf.MVVM.Splash
             this.logo.gameObject.SetActive(false);
         }
 
-        public override void Show(Action onComplete)
+        public override async void Show(Action onComplete)
         {
             OnShow = onComplete;
 
             Visible = VisibleState.Appearing;
 
-            logo.DOFade(1, 0.5f)
+            await logo.DOFade(1, 0.5f)
                 .Play()
                 .OnComplete(() => 
                 {
